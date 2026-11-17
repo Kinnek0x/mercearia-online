@@ -1,6 +1,12 @@
--- Criar base de dados com suporte UTF-8
-DROP DATABASE IF EXISTS mercearia_online;
-CREATE DATABASE mercearia_online CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- Esquema completo + produtos de exemplo, para uma instalação NOVA.
+-- Seguro de repetir: não apaga nada. Se as tabelas já existirem, a importação
+-- pára com um erro em vez de destruir os dados de uma loja em funcionamento.
+--
+-- O administrador NÃO é criado aqui (uma password escrita num ficheiro público
+-- seria conhecida por toda a gente). Depois de importar, crie-o com:
+--     php bin/criar_admin.php
+
+CREATE DATABASE IF NOT EXISTS mercearia_online CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE mercearia_online;
 
 -- Tabela de produtos 
@@ -57,12 +63,6 @@ CREATE TABLE order_items (
     -- SET NULL: eliminar um produto não apaga o histórico das encomendas
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
 ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Inserir utilizador admin padrão
--- Username: admin
--- Password: 123456
-INSERT INTO users (username, password) VALUES 
-('admin', '$2y$10$wUXmRhICEAa4YekMNEjE0uvwxfjsmKOBVdOcHLmSj/UCUid8c7XGW');
 
 -- Produtos iniciais com imagens
 INSERT INTO products (name, name_en, category, price, unit, quantity, image) VALUES

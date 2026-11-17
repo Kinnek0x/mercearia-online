@@ -19,8 +19,8 @@ if ($current === '' || $new === '') {
 }
 
 // Regras mínimas: 8+ caracteres, com letras e números, diferente da atual
-if (strlen($new) < 8 || strlen($new) > 72 || !preg_match('/[A-Za-z]/', $new) || !preg_match('/\d/', $new)) {
-    jsonResponse(['success' => false, 'message' => 'A nova palavra-passe tem de ter 8 a 72 caracteres, com letras e números.'], 400);
+if ($error = adminPasswordError($new, (string)($_SESSION['admin_user']['username'] ?? ''))) {
+    jsonResponse(['success' => false, 'message' => $error], 400);
 }
 if ($new === $current) {
     jsonResponse(['success' => false, 'message' => 'A nova palavra-passe tem de ser diferente da atual.'], 400);

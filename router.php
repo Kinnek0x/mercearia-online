@@ -5,7 +5,7 @@
 
 $path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/');
 
-$blockedDirs = '#^/(config|includes|logs|uploads|arquivos temporario)(/|$)#i';
+$blockedDirs = '#^/(bin|config|includes|logs|uploads|arquivos temporario)(/|$)#i';
 $blockedFiles = '#(\.(sql|log|ini|env|sh|bak|txt|md|json)$)|(/\.)|(^/router\.php$)#i';
 $phpInImages = '#^/images/.*\.(php\d?|phtml|phar)$#i';
 

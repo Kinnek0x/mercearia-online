@@ -269,6 +269,22 @@ function validateRequired($data, $requiredFields) {
 }
 
 
+// Regras da password de administrador: devolve a mensagem de erro, ou null se for válida.
+// Usada ao mudar a password no painel e ao criar o admin (bin/criar_admin.php).
+function adminPasswordError(string $password, string $username = ''): ?string {
+    if (strlen($password) < 8 || strlen($password) > 72) {
+        return 'A palavra-passe tem de ter 8 a 72 caracteres.';
+    }
+    if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/\d/', $password)) {
+        return 'A palavra-passe tem de ter letras e números.';
+    }
+    if ($username !== '' && stripos($password, $username) !== false) {
+        return 'A palavra-passe não pode conter o nome de utilizador.';
+    }
+    return null;
+}
+
+
 // Gerar hash da password
 function hashPassword($password) {
     return password_hash($password, PASSWORD_DEFAULT);

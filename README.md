@@ -46,6 +46,7 @@ Feito em **PHP 8, MySQL/MariaDB e JavaScript**, sem frameworks, com foco em segu
 | XSS | Escape na saída (`e()` / `textContent`) + Content-Security-Policy |
 | CSRF | Token por sessão em todas as ações de admin; cookie `SameSite=Lax` |
 | Força bruta no login | Bloqueio após 5 tentativas falhadas em 15 min por IP |
+| Sem password por omissão | O admin é criado na instalação com `bin/criar_admin.php`, que exige uma password forte; o SQL público não traz nenhuma conta |
 | Sessões | `HttpOnly`, ID regenerado no login, expiração após 30 min de inatividade |
 | Encomendas falsas | Limite por IP/hora e por email, honeypot anti-bot, tempo mínimo de preenchimento, limites de quantidade e valor |
 | Stock | Transações com desconto atómico (`quantity >= ?`) — sem stock negativo em compras simultâneas |
@@ -84,7 +85,8 @@ Os preços, portes e totais são **sempre recalculados no servidor**: o cliente 
 │   └── store.php          Dados da loja, portes e limites (editável pelo cliente)
 ├── css/ js/ images/
 ├── docs/screenshots/      Capturas de ecrã do README
-├── database.sql           Esquema completo + dados iniciais
+├── bin/criar_admin.php    Criar o administrador ou recuperar a password (só no terminal)
+├── database.sql           Esquema completo + produtos de exemplo (não apaga dados existentes)
 ├── migracao_v*.sql        Migrações para bases de dados antigas (v2 → v5)
 └── router.php             Router para o servidor de desenvolvimento do PHP
 ```
@@ -109,7 +111,17 @@ Crie o ficheiro de credenciais a partir do modelo e indique lá o utilizador e a
 cp config/config.local.example.php config/config.local.php
 ```
 
-Em alternativa, defina as variáveis de ambiente `DB_HOST`, `DB_NAME`, `DB_USER` e `DB_PASS` (útil em alojamento). Depois arranque o servidor (o `-d` permite enviar fotos até 5 MB no painel; o PHP vem com 2 MB por omissão):
+Em alternativa, defina as variáveis de ambiente `DB_HOST`, `DB_NAME`, `DB_USER` e `DB_PASS` (útil em alojamento).
+
+Crie o administrador. O script pede o nome e a password (8+ caracteres, com letras e números) e só funciona no terminal:
+
+```bash
+php bin/criar_admin.php
+```
+
+O mesmo comando serve para mudar a password de um administrador que já existe, por exemplo se for esquecida.
+
+Depois arranque o servidor (o `-d` permite enviar fotos até 5 MB no painel; o PHP vem com 2 MB por omissão):
 
 ```bash
 php -d upload_max_filesize=5M -S localhost:8000 router.php
@@ -120,7 +132,7 @@ Abra **http://localhost:8000**.
 O painel de administração não tem link na loja (como numa loja real), mas está sempre em
 **http://localhost:8000/admin/login.php**. Quem não souber o endereço não o encontra pela navegação.
 
-> ⚠️ O utilizador inicial é `admin` / `123456`. **Mude a palavra-passe no separador "Conta"** logo no primeiro acesso.
+> 🔒 O projeto não traz nenhuma conta de administrador com password conhecida: cada instalação cria a sua com `php bin/criar_admin.php`.
 
 Com **Apache / XAMPP**, basta copiar a pasta para `htdocs`: o `.htaccess` já trata da segurança e da página 404.
 
