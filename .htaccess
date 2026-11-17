@@ -1,0 +1,55 @@
+# Configurações de segurança e performance
+
+# Definir página inicial
+DirectoryIndex index.php
+
+# Página de erro 404 (ajuste o caminho se o site estiver numa subpasta, ex.: /mercearia/pages/404.php)
+ErrorDocument 404 /pages/404.php
+
+# Prevenir listagem de diretórios
+Options -Indexes
+
+# Proteger arquivos sensíveis (.sql, logs, etc.)
+<FilesMatch "\.(sql|log|ini|env|sh|bak|txt)$">
+    Require all denied
+</FilesMatch>
+
+# Proteger arquivos .htaccess
+<Files .htaccess>
+    Require all denied
+</Files>
+
+# Definir charset UTF-8
+AddDefaultCharset UTF-8
+
+# Configurar PHP (mod_php.c = PHP 8, mod_php7.c = PHP 7)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 5M
+    php_value post_max_size 6M
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 5M
+    php_value post_max_size 6M
+    php_flag display_errors Off
+    php_flag log_errors On
+</IfModule>
+
+# Cache de arquivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+# Cabeçalhos de segurança
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

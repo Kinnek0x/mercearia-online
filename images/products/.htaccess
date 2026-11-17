@@ -1,0 +1,17 @@
+# Permitir apenas arquivos de imagem
+<FilesMatch "\.(gif|jpe?g|png|webp|svg|ico)$">
+    Require all granted
+</FilesMatch>
+
+# Bloquear PHP e outros scripts nesta pasta (as imagens enviadas ficam aqui)
+<FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh|asp|jsp)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+Options -ExecCGI

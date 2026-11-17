@@ -1,0 +1,22 @@
+# Credenciais locais (nunca publicar)
+config/config.local.php
+.env
+
+# Logs e dados de execução
+logs/*
+!logs/.htaccess
+
+# Uploads feitos pelo painel (as imagens iniciais ficam no repositório)
+uploads/*
+!uploads/.htaccess
+images/products/product_*
+
+# Ficheiros auxiliares locais (não publicar)
+arquivos temporario/
+
+# Editores / sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
